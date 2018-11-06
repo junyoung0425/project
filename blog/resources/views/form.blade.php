@@ -7,173 +7,45 @@
 <!--[if lte IE 8]>
 <script src="css/ie/html5shiv.js"></script>
 <![endif]-->
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <script src="js/jquery.min.js"></script>
 <script src="js/jquery.poptrox-2.2.js"></script>
 <script src="js/skel.min.js"></script>
 <script src="js/init.js"></script>
-<noscript>
-<link rel="stylesheet" href="css/skel-noscript.css">
+<!-- <link rel="stylesheet" href="css/skel-noscript.css">
 <link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/loading.css">
-</noscript>
+<link rel="stylesheet" href="css/loading.css"> -->
+
+
+
+  <link rel="stylesheet" href="css/skel-noscript.css">
+  <!-- Bootstrap core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="css/mdb.min.css" rel="stylesheet">
+  <!-- Your custom styles (optional) -->
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/addons/datatables.min.css" rel="stylesheet">
+  <link href="css/loading.css"rel="stylesheet">
+  
+  <!-- SCRIPTS -->
+  <!-- JQuery -->
+  <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="js/mdb.min.js"></script>
+  <script type="text/javascript" src="js/addons/datatables.min.js"></script>
+
 <script>
 $(document).ready(function(){
-
+  $('#dtBasicExample').DataTable();
+    $('.dataTables_length').addClass('bs-select');
 });
-
-/* sortingNumber() : 숫자인 실수만으로 되어있을 때, 적용될 함수 */ 
-
-function sortingNumber( a , b ){  
-
-        if ( typeof a == "number" && typeof b == "number" ) return a - b; 
-
-        // 천단위 쉼표와 공백문자만 삭제하기.  
-        var a = ( a + "" ).replace( /[,\s\xA0]+/g , "" ); 
-        var b = ( b + "" ).replace( /[,\s\xA0]+/g , "" ); 
-
-        var numA = parseFloat( a ) + ""; 
-        var numB = parseFloat( b ) + ""; 
-
-        if ( numA == "NaN" || numB == "NaN" || a != numA || b != numB ) return false; 
-
-        return parseFloat( a ) - parseFloat( b ); 
-} 
-
-
-/* changeForSorting() : 문자열 바꾸기. */ 
-
-function changeForSorting( first , second ){  
-
-        // 문자열의 복사본 만들기. 
-        var a = first.toString().replace( /[\s\xA0]+/g , " " ); 
-        var b = second.toString().replace( /[\s\xA0]+/g , " " ); 
-
-        var change = { first : a, second : b }; 
-
-        if ( a.search( /\d/ ) < 0 || b.search( /\d/ ) < 0 || a.length == 0 || b.length == 0 ) return change; 
-
-        var regExp = /(\d),(\d)/g; // 천단위 쉼표를 찾기 위한 정규식. 
-
-        a = a.replace( regExp , "$1" + "$2" ); 
-        b = b.replace( regExp , "$1" + "$2" ); 
-
-        var unit = 0; 
-        var aNb = a + " " + b; 
-        var numbers = aNb.match( /\d+/g ); // 문자열에 들어있는 숫자 찾기 
-
-        for ( var x = 0; x < numbers.length; x++ ){ 
-
-                var length = numbers[ x ].length; 
-                if ( unit < length ) unit = length; 
-        } 
-
-        var addZero = function( string ){ // 숫자들의 단위 맞추기 
-
-                var match = string.match( /^0+/ ); 
-
-                if ( string.length == unit ) return ( match == null ) ? string : match + string; 
-
-                var zero = "0"; 
-
-                for ( var x = string.length; x < unit; x++ ) string = zero + string; 
-
-                return ( match == null ) ? string : match + string; 
-        }; 
-
-        change.first = a.replace( /\d+/g, addZero ); 
-        change.second = b.replace( /\d+/g, addZero ); 
-
-        return change; 
-} 
-
-/*    ordinary() 
- * 
- * 1. ascending : 오름차순 
- * 2. descending : 내림차순 
-*/ 
-
-function ordinary(){ 
-
-        var compare = function( a , b ){ 
-
-                var sorting = sortingNumber( a , b ); 
-
-                if ( typeof sorting == "number" ) return sorting; 
-
-                var change = changeForSorting( a , b ); 
-
-                var a = change.first; 
-                var b = change.second; 
-
-                return ( a < b ) ? -1 : ( a == b ) ? 0 : 1; 
-        }; 
-
-        var ascendingOrder = function( a , b ){  return compare( a , b );  }; 
-        var descendingOrder = function( a , b ){  return compare( b , a );  }; 
-
-        return { ascending : ascendingOrder, descending : descendingOrder }; 
-} 
-
-
-/*    ignoreCase() : 대소문자 무시 ( toLowerCase ) 
- * 
- * 1. ascending : 오름차순 
- * 2. descending : 내림차순 
-*/ 
-
-function ignoreCase(){ 
-
-        var compare = function( a , b ){ 
-
-                var sorting = sortingNumber( a , b ); 
-
-                if ( typeof sorting == "number" ) return sorting; 
-
-                var change = changeForSorting( a , b ); 
-
-                var a = change.first.toLowerCase(); 
-                var b = change.second.toLowerCase(); 
-
-                return ( a < b ) ? -1 : ( a == b ) ? 0 : 1;   // 또는,  return a.localeCompare ( b );
-        }; 
-
-        var ascendingOrder = function( a , b ){  return compare( a , b );  }; 
-        var descendingOrder = function( a , b ){  return compare( b , a );  }; 
-
-        return { ascending : ascendingOrder, descending : descendingOrder }; 
-} 
-
-
-/*    byLocale() : 로컬에 따라 ( localeCompare ) - 언어에 따라, 결과가 다를 수 있음. 
- * 
- * 1. ascending : 오름차순 
- * 2. descending : 내림차순 
-*/ 
-
-function byLocale(){ 
-
-        var compare = function( a , b ){ 
-
-                var sorting = sortingNumber( a , b ); 
-
-                if ( typeof sorting == "number" ) return sorting; 
-
-                var change = changeForSorting( a , b ); 
-
-                var a = change.first; 
-                var b = change.second; 
-
-                return a.localeCompare( b ); 
-        }; 
-
-        var ascendingOrder = function( a , b ){  return compare( a , b );  }; 
-        var descendingOrder = function( a , b ){  return compare( b , a );  }; 
-
-        return { ascending : ascendingOrder, descending : descendingOrder }; 
-} 
-
-
-
 function wrapWindowByMask() {
         //화면의 높이와 너비를 구한다.
         var maskHeight = $(document).height(); 
@@ -291,25 +163,19 @@ function clickXXX(args){
 <article id = "first" class="container box style1"> 
 <div class="inner">
 <!-- 동적 테이블 -->
-    <table border="1" id="table">
-      <colgroup>
-        <!-- column 의 설정을 할수 있다. -->
-        <col style="width:30px;">
-        <col style="width:100px;">
-        <col style="width:150px;">
-        <col style="width:50px;">
-      </colgroup>
-
-      <thead>
-        <tr>
-          <th>Status</th>
-          <th>Url</th>
-        </tr>
-      </thead>
-      <tbody>
-        
-        </tr>
-      </tbody>
+<table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th class="th-sm">StatusCode
+          <i class="fa fa-sort float-right" aria-hidden="true"></i>
+        </th>
+        <th class="th-sm">URL
+          <i class="fa fa-sort float-right" aria-hidden="true"></i>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+</tbody>
     </table>
   </div>
 </article>
@@ -329,8 +195,8 @@ function clickXXX(args){
 
       <thead>
         <tr>
-          <th>Status</th> <!--<button onclick="sortTD ( 0 )">▲</button><button onclick="reverseTD ( 0 )">▼</button></th>-->
-          <th>Url</th> <!--<button onclick="sortTD ( 1 )">▲</button><button onclick="reverseTD ( 1 )">▼</button></th>-->
+          <th>Status</th>     <i class="fa fa-sort float-right" aria-hidden="true"></i></th>
+          <th>Url</th>     <i class="fa fa-sort float-right" aria-hidden="true"></i></th>
         </tr>
       </thead>
       <tbody>
