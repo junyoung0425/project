@@ -26,10 +26,8 @@
   <!-- Material Design Bootstrap -->
   <link href="css/mdb.min.css" rel="stylesheet">
   <!-- Your custom styles (optional) -->
-  <link href="css/style.css" rel="stylesheet">
-  <link href="css/addons/datatables.min.css" rel="stylesheet">
   <link href="css/loading.css"rel="stylesheet">
-  
+  <link href="css/addons/datatables.min.css" rel="stylesheet"> 
   <!-- SCRIPTS -->
   <!-- JQuery -->
   <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
@@ -41,11 +39,16 @@
   <script type="text/javascript" src="js/mdb.min.js"></script>
   <script type="text/javascript" src="js/addons/datatables.min.js"></script>
 
+
+
 <script>
-$(document).ready(function(){
-  $('#dtBasicExample').DataTable();
+  $(document).ready(function(){
+
+
+    $('#failure').DataTable();
+    $('#success').DataTable();
     $('.dataTables_length').addClass('bs-select');
-});
+  });
 function wrapWindowByMask() {
         //화면의 높이와 너비를 구한다.
         var maskHeight = $(document).height(); 
@@ -99,8 +102,8 @@ function clickXXX(args){
                 {
                   var append1 = "";
                   var append2 = "";
-                  var tbody1 = $("#succ > .inner > table > tbody");  
-                  var tbody2 = $("#first > .inner > table > tbody");  
+                  var tbody1 = $("#failure > tbody");  
+                  var tbody2 = $("#success > tbody");  
                   tbody1.html("");
                   tbody2.html("");
                   for(i=0;i<data.succ.status.length;i++){
@@ -153,17 +156,40 @@ function clickXXX(args){
   </header>
   <body>
     <div> 
-      <label>Please Enter Your Link : </label><input class="button style2 scrolly" type="text" id="inputTest" name="" onKeyPress="if(event.keyCode==13){clickXXX(this);location.href='#first'}"  />
+      <label>Please Enter Your Link : </label><input class="button style2 scrolly" type="text" id="inputTest" name="" onKeyPress="if(event.keyCode==13){clickXXX(this);location.href='#failure'}"  />
     </div> <!--엔터키로 검색할 경우에도 스크롤 내려가는 기능 추가 필요-->
     
   </body>
   <br>
-  <footer><a id="a" href="#first" class="button style2 scrolly" onclick="javascript:clickXXX($('#inputTest'));" >Submit</a> </footer>
+  <footer><a id="a" href="#failure" class="button style2 scrolly" onclick="javascript:clickXXX($('#inputTest'));" >Submit</a> </footer>
 </section>
-<article id = "first" class="container box style1"> 
-<div class="inner">
+<article id = "fail" class="container box style1"> 
+  <div class="inner1">
+  <!-- 동적 테이블 -->
+    <table id="failure" class="table table-striped table-bordered table-fail" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <th class="th-sm">StatusCode
+            <i class="fa fa-sort float-right" aria-hidden="true"></i>
+          </th>
+          <th class="th-sm">URL
+            <i class="fa fa-sort float-right" aria-hidden="true"></i>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>11111</td></tr>
+        <tr><td>222222</td></tr>
+      </tbody>
+    </table>
+  </div>
+</article>
+
+
+<article id="succ" class="container box style1 below"> 
+  <div class="inner2">
 <!-- 동적 테이블 -->
-<table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+    <table id="success" class="table table-striped table-bordered table-succ" cellspacing="0" width="100%">
     <thead>
       <tr>
         <th class="th-sm">StatusCode
@@ -175,34 +201,7 @@ function clickXXX(args){
       </tr>
     </thead>
     <tbody>
-</tbody>
-    </table>
-  </div>
-</article>
-
-
-<article id="succ" class="container box style1"> 
-  <div class="inner">
-<!-- 동적 테이블 -->
-    <table border="1" id="table">
-      <colgroup>
-        <!-- column 의 설정을 할수 있다. -->
-        <col style="width:30px;">
-        <col style="width:100px;">
-        <col style="width:150px;">
-        <col style="width:50px;">
-      </colgroup>
-
-      <thead>
-        <tr>
-          <th>Status</th>     <i class="fa fa-sort float-right" aria-hidden="true"></i></th>
-          <th>Url</th>     <i class="fa fa-sort float-right" aria-hidden="true"></i></th>
-        </tr>
-      </thead>
-      <tbody>
-        
-        </tr>
-      </tbody>
+    </tbody>
     </table>
   </div>
 </article>
