@@ -7,27 +7,16 @@
 <!--[if lte IE 8]>
 <script src="css/ie/html5shiv.js"></script>
 <![endif]-->
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-<script src="js/jquery.min.js"></script>
-<script src="js/jquery.poptrox-2.2.js"></script>
-<script src="js/skel.min.js"></script>
-<script src="js/init.js"></script>
-<!-- <link rel="stylesheet" href="css/skel-noscript.css">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/loading.css"> -->
-
-
-
-  <link rel="stylesheet" href="css/skel-noscript.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- Bootstrap core CSS -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <!-- Material Design Bootstrap -->
   <link href="css/mdb.min.css" rel="stylesheet">
   <!-- Your custom styles (optional) -->
-  <link href="css/loading.css"rel="stylesheet">
-  <link href="css/addons/datatables.min.css" rel="stylesheet"> 
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/addons/datatables.min.css" rel="stylesheet">
+  
   <!-- SCRIPTS -->
   <!-- JQuery -->
   <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
@@ -39,16 +28,22 @@
   <script type="text/javascript" src="js/mdb.min.js"></script>
   <script type="text/javascript" src="js/addons/datatables.min.js"></script>
 
-
-
 <script>
+  var table1;
+  var table2;
   $(document).ready(function(){
-
-
-    // $('#failure').DataTable();
-    // $('#success').DataTable();
-    $('.dataTables_length').addClass('bs-select');
+    sort();
   });
+  function sort(){
+    table1 = $('#failure').DataTable();
+    table2 = $('#success').DataTable();
+    $('.dataTables_length').addClass('bs-select');
+  }
+  function destroy(){
+
+    table1.destroy();
+    table2.destroy();
+  }
 function wrapWindowByMask() {
         //화면의 높이와 너비를 구한다.
         var maskHeight = $(document).height(); 
@@ -82,9 +77,30 @@ function wrapWindowByMask() {
     }
 
 function closeWindowByMask() {
-        $('#mask, #loadingImg').hide();
-        $('#mask, #loadingImg').remove();  
-    }
+    $('#mask, #loadingImg').hide();
+    $('#mask, #loadingImg').remove();  
+}
+function excelExport() {
+
+//테스트 다운로드 작성
+
+// $.ajax(
+//           { 
+//                 type: 'get' 
+//                 , url: '/test/'+url //입력 부분 추가 
+//                 , dataType : 'json' // 받아올 데이터 형식
+//                 , success: function(data) 
+//                 {
+                 
+//                 } 
+//                 , error: function(data)
+//                 {
+                  
+                                   
+//                 }
+              
+//       } );
+}
 
 function clickXXX(args){
   wrapWindowByMask();  
@@ -101,35 +117,55 @@ function clickXXX(args){
                 , success: function(data) 
                 {
                   var append1 = "";
-                  var append2 = "";
-                  var tbody1 = $("#failure > tbody");  
-                  var tbody2 = $("#success > tbody");  
-                  tbody1.html("");
-                  tbody2.html("");
-                  for(i=0;i<data.succ.status.length;i++){
-                    append1 += "<tr>";
-                    append1 += "<td>";
-                    append1 += data.succ.status[i];
-                    append1 += "</td>";
-                    append1 += "<td>";
-                    append1 += data.succ.url[i];
-                    append1 += "</td>";
-                    append1 += "</tr>";
-                  }
-                  for(i=0;i<data.fail.status.length;i++){
-                    append2 += "<tr>";
-                    append2 += "<td>";
-                    append2 += data.fail.status[i];
-                    append2 += "</td>";
-                    append2 += "<td>";
-                    append2 += data.fail.url[i];
-                    append2 += "</td>";
-                    append2 += "</tr>";
-                  }
+                  var append2 = "" ;
+
+                  // var tbody1 = $("#failure > tbody");  
+                  // var tbody2 = $("#success > tbody");  
+                  // tbody1.html("");
+                  // tbody2.html("");
+                  // for(i=0;i<data.succ.status.length;i++){
+                  //   append1 += "<tr>";
+                  //   append1 += "<td>";
+                  //   append1 += data.succ.status[i];
+                  //   append1 += "</td>";
+                  //   append1 += "<td>";
+                  //   append1 += data.succ.url[i];
+                  //   append1 += "</td>";
+                  //   append1 += "</tr>";
+                  // }
+                  // for(i=0;i<data.fail.status.length;i++){
+                  //   append2 += "<tr>";
+                  //   append2 += "<td>";
+                  //   append2 += data.fail.status[i];
+                  //   append2 += "</td>";
+                  //   append2 += "<td>";
+                  //   append2 += data.fail.url[i];
+                  //   append2 += "</td>";
+                  //   append2 += "</tr>";
+                  // }
                   
-                  tbody1.append(append1);
-                  tbody2.append(append2);
-                  closeWindowByMask(); 
+                  // tbody1.append(append1);
+                  // tbody2.append(append2);
+                  closeWindowByMask();
+                 destroy();
+                    
+                 
+                  
+                  // if(data.fail != null) table1 = $('#failure').DataTable(null);
+                  // else
+                  if(data.fail != null ){
+                    table1.clear();
+                    table1 = $('#failure').DataTable(data.fail);
+                  }else{
+                    table1.clear().draw(); 
+                  }
+                  if(data.succ != null ){
+                    table2.clear();
+                    table2 = $('#success').DataTable(data.succ);
+                  }else{
+                    table2.clear().draw(); 
+                  }
+                                   
                 } 
                 , error: function(data)
                 {
@@ -145,9 +181,7 @@ function clickXXX(args){
 <link rel="stylesheet" href="css/ie/v8.css">
 <![endif]-->
 </head>
-<script>
-    
-</script>
+
 <body>
 <section id="header">
   <header>
@@ -161,25 +195,30 @@ function clickXXX(args){
     
   </body>
   <br>
-  <footer><a id="a" href="#failure" class="button style2 scrolly" onclick="javascript:clickXXX($('#inputTest'));" >Submit</a> </footer>
+  <footer>
+    <a id="a" href="#failure" class="button style2 scrolly" onclick="javascript:clickXXX($('#inputTest'));" >Submit</a>
+    <button id="a" href="#failure" class="button style2 scrolly" onclick="javascript:excelExport($('#inputTest'));" >Submit</button>
+  </footer>
 </section>
 <article id = "fail" class="container box style1"> 
   <div class="inner1">
   <!-- 동적 테이블 -->
-    <table id="failure" class="table table-striped table-bordered table-fail" cellspacing="0" width="100%">
+    <table id="failure" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
       <thead>
         <tr>
           <th class="th-sm">StatusCode
-            <i class="fa fa-sort float-right" aria-hidden="true"></i>
+           <i class="fa fa-sort float-right" aria-hidden="true"></i>
           </th>
-          <th class="th-sm">URL
-            <i class="fa fa-sort float-right" aria-hidden="true"></i>
+          <th class="th-sm2">URL
+          <i class="fa fa-sort float-right" aria-hidden="true"></i>
           </th>
         </tr>
       </thead>
       <tbody>
-        <tr><td>11111</td></tr>
-        <tr><td>222222</td></tr>
+        <!-- <tr><td>3333333</td><td></td></tr>
+        <tr><td>222222</td><td></td></tr>
+        <tr><td>11111</td><td></td></tr> -->
+        
       </tbody>
     </table>
   </div>
@@ -189,13 +228,13 @@ function clickXXX(args){
 <article id="succ" class="container box style1 below"> 
   <div class="inner2">
 <!-- 동적 테이블 -->
-    <table id="success" class="table table-striped table-bordered table-succ" cellspacing="0" width="100%">
+    <table id="success" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
     <thead>
       <tr>
-        <th class="th-sm">StatusCode
+        <th class="th-sm3">StatusCode
           <i class="fa fa-sort float-right" aria-hidden="true"></i>
         </th>
-        <th class="th-sm">URL
+        <th class="th-sm4">URL
           <i class="fa fa-sort float-right" aria-hidden="true"></i>
         </th>
       </tr>
@@ -270,40 +309,6 @@ function clickXXX(args){
     </ul>
   </div>
 </section>
-
-<script type="text/javascript">
-$('#append_row').on("click", function () {
-	$('#list_table').append(
-		$('<tr>').append(
-			$('<td>').append($('#add_no').val()),
-			$('<td>').append($('#add_name').val()),
-			$('<td>').append($('#add_birth').val()),
-			$('<td>').append(
-				// property와 attribute의 차이!!
-				$('<a>').prop('href', '#').addClass('delete-link').append('Delete')
-				// <a href="#" class="delete-link">Delete</a>
-			)
-		)
-	);
-});
-
-$('#list_table').on("click", ".delete-link", function () {
-  /*
-  <tr>
-    <td>3</td>
-    <td>seok</td>
-    <td>901217</td>
-    <td>
-      <a href="#" class="delete-link">Delete</a>
-    </td>
-  </tr>
-  */
-  // this == a의 부모의 부모는 tr태그
-  $(this).parent().parent().remove();
-})
-</script>
-
-
 
 
 

@@ -2,9 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\Controller;
+use App\User;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Illuminate\Http\Request;
 use HTMLDomParser;
 use Curl;
+
+
+
 
 class TestController extends Controller
 {
@@ -55,14 +63,14 @@ class TestController extends Controller
 
                 $response2 = $this->getCurl($url); // 
                
-                // echo $url; 
+             //    echo $url; 
                 // echo "<br>"; // 엔터키 입력
 
                 if($response2->status !==200 && $response2->status !==301 && $response2->status !==302  && $response2->status !== 0 ) {    //   스테이터스가 0인 경우(자바스크립트임) -->200(정상 스테이터스)가 아닐시에 반환
 
-                    $results['fail']['status'][$arrIdx] = $response2->status;
+                    $results['fail']['data'][$arrIdx][] = $response2->status;
                //     alert ['status'][$arrIdx];
-                    $results['fail']['url'][$arrIdx] = $url;
+                    $results['fail']['data'][$arrIdx][] = $url;
                     $arrIdx++;
                     // echo $response2->status;  // 에러 코드 표시
                     // echo "<br>";
@@ -71,17 +79,24 @@ class TestController extends Controller
             //  echo $a->plaintext; // 에러 관련 정보 a tag 내의 설명항목 <에러생김>☆
                 }else if($response2->status !== 0){
                     
-                    $results['succ']['status'][$arrIdx2] = $response2->status;
+                    $results['succ']['data'][$arrIdx2][] = $response2->status;
                //     alert ['status'][$arrIdx];
-                    $results['succ']['url'][$arrIdx2] = $url;
+                    $results['succ']['data'][$arrIdx2][] = $url;
                     $arrIdx2++;
                 }
            
             }
         }
+        
         return json_encode($results);
 
     }
+
+    public function export() 
+    {
+        return Excel::download(new UsersExport, 'users.xlsx');
+    }
+
     private function getUrl($url)
     {
         if(strpos($url, 'https://') === false){
