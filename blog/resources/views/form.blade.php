@@ -16,6 +16,11 @@
   <!-- Your custom styles (optional) -->
   <link href="css/style.css" rel="stylesheet">
   <link href="css/addons/datatables.min.css" rel="stylesheet">
+
+<noscript>
+<link rel="stylesheet" href="css/skel-noscript.css">
+<link rel="stylesheet" href="css/loading.css">
+</noscript>
   
   <!-- SCRIPTS -->
   <!-- JQuery -->
@@ -40,9 +45,14 @@
     $('.dataTables_length').addClass('bs-select');
   }
   function destroy(){
-
-    table1.destroy();
-    table2.destroy();
+    if ( $.fn.DataTable.isDataTable( '#failure' ) ) {
+      // $('#failure').dataTable();
+      table1.destroy();
+    }
+    if ( $.fn.DataTable.isDataTable( '#success' ) ) {
+      // $('#success').dataTable();
+      table2.destroy();
+    }
   }
 function wrapWindowByMask() {
         //화면의 높이와 너비를 구한다.
@@ -53,8 +63,8 @@ function wrapWindowByMask() {
         var mask = "<div id='mask' style='position:absolute; z-index:9000; background-color:#000000; display:none; left:0; top:1000;'></div>";
         var loadingImg = '';
          
-        loadingImg += "<div id='loadingImg' style='position:absolute; left:50%; top:40%; display:none; z-index:10000;'>";
-        loadingImg += " <img src='images/loading.gif'/>";
+        loadingImg += "<div id='loadingImg' style='position:absolute; left:43%; top:170%; display:none; z-index:10000;'>";
+        loadingImg += "<img src='images/loading.gif'/>";
         loadingImg += "</div>";  
      
         //화면에 레이어 추가
@@ -67,6 +77,7 @@ function wrapWindowByMask() {
                 'width' : maskWidth
                 , 'height': maskHeight
                 , 'opacity' : '0.3'
+                , 'top' : '0'
         }); 
      
         //마스크 표시
@@ -119,36 +130,10 @@ function clickXXX(args){
                   var append1 = "";
                   var append2 = "" ;
 
-                  // var tbody1 = $("#failure > tbody");  
-                  // var tbody2 = $("#success > tbody");  
-                  // tbody1.html("");
-                  // tbody2.html("");
-                  // for(i=0;i<data.succ.status.length;i++){
-                  //   append1 += "<tr>";
-                  //   append1 += "<td>";
-                  //   append1 += data.succ.status[i];
-                  //   append1 += "</td>";
-                  //   append1 += "<td>";
-                  //   append1 += data.succ.url[i];
-                  //   append1 += "</td>";
-                  //   append1 += "</tr>";
-                  // }
-                  // for(i=0;i<data.fail.status.length;i++){
-                  //   append2 += "<tr>";
-                  //   append2 += "<td>";
-                  //   append2 += data.fail.status[i];
-                  //   append2 += "</td>";
-                  //   append2 += "<td>";
-                  //   append2 += data.fail.url[i];
-                  //   append2 += "</td>";
-                  //   append2 += "</tr>";
-                  // }
-                  
-                  // tbody1.append(append1);
-                  // tbody2.append(append2);
+
                   closeWindowByMask();
                  destroy();
-                    
+                 
                  
                   
                   // if(data.fail != null) table1 = $('#failure').DataTable(null);
@@ -156,12 +141,14 @@ function clickXXX(args){
                   if(data.fail != null ){
                     table1.clear();
                     table1 = $('#failure').DataTable(data.fail);
+                    table1.draw();
                   }else{
                     table1.clear().draw(); 
                   }
                   if(data.succ != null ){
                     table2.clear();
                     table2 = $('#success').DataTable(data.succ);
+                    table2.draw();
                   }else{
                     table2.clear().draw(); 
                   }
@@ -197,7 +184,7 @@ function clickXXX(args){
   <br>
   <footer>
     <a id="a" href="#failure" class="button style2 scrolly" onclick="javascript:clickXXX($('#inputTest'));" >Submit</a>
-    <button id="a" href="#failure" class="button style2 scrolly" onclick="javascript:excelExport($('#inputTest'));" >Submit</button>
+ <!--  <button id="a" href="#failure" class="button style2 scrolly" onclick="javascript:excelExport($('#inputTest'));" >Submit</button>-->
   </footer>
 </section>
 <article id = "fail" class="container box style1"> 
@@ -273,34 +260,7 @@ function clickXXX(args){
     </div>
   </div>
 </article>
-<article class="container box style3">
-  <header>
-    <h2></h2>
-    <p>페이지 이용에 도움을 주세요</p>
-  </header>
-  <form action="#">
-    <div class="row half">
-      <div class="6u">
-        <input type="text" class="text" name="name" placeholder="Name">
-      </div>
-      <div class="6u">
-        <input type="text" class="text" name="email" placeholder="Email">
-      </div>
-    </div>
-    <div class="row half">
-      <div class="12u">
-        <textarea name="message" placeholder="Message"></textarea>
-      </div>
-    </div>
-    <div class="row">
-      <div class="12u">
-        <ul class="actions">
-          <li><a href="#" class="button form">Send Message</a></li>
-        </ul>
-      </div>
-    </div>
-  </form>
-</article>
+
 <section id="footer">
   <div class="copyright">
     <ul class="menu">
