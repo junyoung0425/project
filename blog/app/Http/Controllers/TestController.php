@@ -36,7 +36,7 @@ class TestController extends Controller
                 $basicUrl .= $params;
             }
             $basicUrl = (urldecode($basicUrl));
-            $results;
+            $results= [];
             $arrIdx = 0;
             $arrIdx2 = 0;
     
@@ -113,7 +113,7 @@ class TestController extends Controller
         return $dom;
     }
     private function getCurl($link){ // 컬 요청에 ->withResponseHeaders()->returnResponseObject()를 추가하여  
-        return Curl::to($link)->returnResponseObject()->get();
+        return Curl::to($link)->returnResponseObject()->allowRedirect(true)->get();
 
     }// 함수 분리해서 하나는 전체 정보, 하나는 일부 정보를 가져오도록 분리
 

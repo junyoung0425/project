@@ -174,7 +174,8 @@ function clickXXX(args){
 
                   console.log(data);
                   closeWindowByMask(); 
-                  alert('유효하지 않은 URL 입니다');
+                 // alert('유효하지 않은 URL 입니다');
+                 alert('a tag를 불러 들이지 못했습니다.');
                                    
                 }
               
