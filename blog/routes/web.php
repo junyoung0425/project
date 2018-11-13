@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 
 
-Route::get('/test/{test}', 'TestController@test');
+Route::post('/linkCheck', 'TestController@test');
 //Route::get('/test/', 'test.php@test');
 // Route::get('/test/{test}', function ($test) {
 //     return $test;

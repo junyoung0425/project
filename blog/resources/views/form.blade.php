@@ -115,18 +115,29 @@ function excelExport() {
 
 function clickXXX(args){
   wrapWindowByMask();  
+  // url = encodeURI(url);
   var url = $(args).val();
+  var params = "";
   url = url.replace("https://","");
   url = url.replace("http://","");
+  url = encodeURIComponent(url);
+  //만약 물음표가 있다면
+  if(url.indexOf('?'!=-1)){
+    var urls = url.split("?");
+    url = urls[0];
+    params = urls[1];
   
+  }
    
   $.ajax(
           { 
-                type: 'get' 
-                , url: '/test/'+url //입력 부분 추가 
+                type: 'post' 
+                , url: '/linkCheck' //입력 부분 추가              
+                , data : {'url' : url, 'params' : params}
                 , dataType : 'json' // 받아올 데이터 형식
                 , success: function(data) 
                 {
+
                   var append1 = "";
                   var append2 = "" ;
 
@@ -156,6 +167,12 @@ function clickXXX(args){
                 } 
                 , error: function(data)
                 {
+                  
+        // if(strpos(url, '?url=') === true){
+        //     $url = 'abc'.$url;
+        // }// ?url=이 test 뒤에 붙게되면 강제로 /로 변경
+
+                  console.log(data);
                   closeWindowByMask(); 
                   alert('유효하지 않은 URL 입니다');
                                    
@@ -231,7 +248,7 @@ function clickXXX(args){
     </table>
   </div>
 </article>
-<article class="container box style1 left"> 
+<!-- <article class="container box style1 left"> 
   <div class="inner">
     <header>
       <h2>Mollis posuere<br>
@@ -259,7 +276,7 @@ function clickXXX(args){
       <div class="3u"><a href="images/fulls/08.jpg" class="image full"><img src="images/thumbs/08.jpg" alt="" title="People come and go and walk away"></a></div>
     </div>
   </div>
-</article>
+</article> -->
 
 <section id="footer">
   <div class="copyright">
